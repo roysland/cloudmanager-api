@@ -16,11 +16,24 @@ class UserController extends Controller
         return response()->json(['user' => Auth::user()]);
     }
 
-    public function repos () {
+    public function repos (Request $request) {
+        $page = 1;
+        if ($request->input('page')) {
+            $page = $request->input('page');
+        }
         $user = Auth::user();
-        $client = new Client();
+        $client = new Client(null, null, env('GITHUB_URL'));;
         $client->authenticate($user->access_token, null, \Github\Client::AUTH_ACCESS_TOKEN);
-        $repos = $client->api('user')->repositories($user->login);
-        return response()->json(['repos' => $repos]);
+        $result = $client->api('user')->repositories('aftenbladet-mm', $page = intval($page));
+        /* $result = $client->api('search')->repositories('org:aftenbladet-mm', [
+            'start_page' => $page,
+            'sort' => 'created',
+            'direction' => 'desc'
+        ], 'created', 'desc'); */
+/*         $orgApi = $client->api('organization');
+        $paginator = new \Github\ResultPage($client);
+        $parameters = ['github'];
+        $result = $paginator->fetch($orgApi, 'repositories', $parameters); */
+        return response()->json(['repos' => $result, 'page' => $page]);
     }
 }

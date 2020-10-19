@@ -17,7 +17,7 @@ class CreateServicesTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->string('type');
-            $table->string('repo')->nullable();
+            $table->text('repo')->nullable();
             $table->text('config')->nullable();
             $table->text('tags')->nullable();
             $table->timestamps();

@@ -21,10 +21,10 @@ class AuthController extends Controller
                 'client_id' => env('GITHUB_CLIENT'),
                 'client_secret' => env('GITHUB_SECRET'),
                 'code' => $code,
-                'accept' => 'json'
+                'accept' => 'application/json'
             ]
         ];
-        $response = $client->request('POST', 'https://github.com/login/oauth/access_token', $payload);
+        $response = $client->request('POST', env('GITHUB_URL').'/login/oauth/access_token', $payload);
         $body = $response->getBody();
         parse_str((string) $body, $output);
         if (array_key_exists('access_token', $output)) {
@@ -42,7 +42,8 @@ class AuthController extends Controller
     }
 
     public function getUser ($accessToken) {
-        $client = new GithubClient();
+        $client = new GithubClient(null, null, env('GITHUB_URL'));
+
         $client->authenticate($accessToken, null, \Github\Client::AUTH_ACCESS_TOKEN);
         $user = $client->currentUser();
         return $user->show();

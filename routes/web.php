@@ -24,3 +24,7 @@ $router->get('/auth/code', 'AuthController@getCode');
 $router->get('/user', 'UserController@me');
 $router->get('/user/repos', 'UserController@repos');
 // $router->get('/user', ['middleware' => 'auth', 'uses' => 'UserController@me']);
+$router->get('/services', 'ServiceController@getServices');
+$router->post('/service/create', 'ServiceController@store');
+
+$router->get('/services/{service}', 'ServiceController@getService');
