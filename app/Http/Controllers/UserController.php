@@ -24,16 +24,8 @@ class UserController extends Controller
         $user = Auth::user();
         $client = new Client(null, null, env('GITHUB_URL'));;
         $client->authenticate($user->access_token, null, \Github\Client::AUTH_ACCESS_TOKEN);
-        $result = $client->api('user')->repositories('aftenbladet-mm', $page = intval($page));
-        /* $result = $client->api('search')->repositories('org:aftenbladet-mm', [
-            'start_page' => $page,
-            'sort' => 'created',
-            'direction' => 'desc'
-        ], 'created', 'desc'); */
-/*         $orgApi = $client->api('organization');
-        $paginator = new \Github\ResultPage($client);
-        $parameters = ['github'];
-        $result = $paginator->fetch($orgApi, 'repositories', $parameters); */
+        $result = $client->api('search')->repositories('org:aftenbladet-mm', 'updated', 'desc');
+
         return response()->json(['repos' => $result, 'page' => $page]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\DeployWeb;
 use App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,5 +51,13 @@ class ServiceController extends Controller
         return response()->json([
             'service' => $service
         ]); 
+    }
+
+    public function buildService ($service) {
+        $serv = Service::find($service);
+        dispatch(new DeployWeb($serv));
+        return response()->json(['msg' => 'Dispatched build']);
+
+
     }
 }

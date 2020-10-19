@@ -2,6 +2,14 @@
 
 namespace App\Jobs;
 
+use App\Service;
+use App\Jobs\Job;
+use Illuminate\Bus\Queueable;
+
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+
+
 class DeployWeb extends Job
 {
     /**
@@ -9,11 +17,11 @@ class DeployWeb extends Job
      *
      * @return void
      */
-
+    use InteractsWithQueue, Queueable, SerializesModels;
     public $service;
     public function __construct(Service $service)
     {
-        $this->service = $service
+        $this->service = $service;
     }
 
     /**
@@ -23,6 +31,10 @@ class DeployWeb extends Job
      */
     public function handle()
     {
-        //
+        $repo = $this->service->repo['clone_url'];
+        $repoName = $this->service->repo['name'];
+        // $cmd = "ssh -i git clone ". $repo ." && cd ". $repoName ." && npm install";
+        $cmd = "touch ". $repoName .".txt";
+        shell_exec($cmd);
     }
 }

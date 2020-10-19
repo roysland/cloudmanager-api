@@ -28,3 +28,4 @@ $router->get('/services', 'ServiceController@getServices');
 $router->post('/service/create', 'ServiceController@store');
 
 $router->get('/services/{service}', 'ServiceController@getService');
+$router->get('/service/{service}/build', 'ServiceController@buildService');
